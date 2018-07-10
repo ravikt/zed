@@ -3,8 +3,9 @@
 
 import rospy
 from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
 
-def callback(data):
+def imleft(data):
     rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
 
 def listener():
@@ -15,8 +16,8 @@ def listener():
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
-
-    rospy.Subscriber('/zed/rgb/image_rect_color', Image, callback)
+    bridge = CvBridge()
+    rospy.Subscriber('/left/image_rect_color', Image, imleft)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

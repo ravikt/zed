@@ -4,7 +4,8 @@ import rospy
 import numpy as np
 import sys, time
 import cv2
-import scipy.ndimage import filters
+
+from matplotlib import pyplot as plt
 
 import roslib
 import rospy
@@ -12,47 +13,45 @@ import rospy
 from sensor_msgs.msg import Image, CompressedImage 
 from cv_bridge import CvBridge, CvBridgeError
 
-VERBOSE = True
 
 class disparity:
     
      def __init__(self):
 
          self.bridge = CvBridge()
-        
+         self.stereo = cv2.createStereoBM(numDisparities=16, blockSize=15)
          self.disp_pub = rospy.Publisher("disparity", Image, queue_size=1)
 
-         self.subscriber = rospy.Subscriber("/left/image_rect_color", Image, self.imleft, queue_size = 1)
+         self.imleft_sub = rospy.Subscriber("/left/image_rect_color", Image, self.imleft, queue_size = 1)
  
-         self.subscriber = rospy.Subscriber("/right/image_rect_color", Image, self.imright, queue_size = 1)
-        
+         self.imright_sub = rospy.Subscriber("/right/image_rect_color", Image, self.imright, queue_size = 1)
+
+         self.last_right_image=None
+         self.last_left_image=None
+         
          rospy.loginfo("disparity initialized")
 
      def imleft(self, leftimage):
-
-         leftimage = self.bridge.imgmsg_to_cv2(leftimage)
-         return leftimage
+	    if self.last_right_image:
+		    disp = self.stereo.compute(leftimage, self.last_right_image)
+		    self.disp_pub.publish(disp)
+		    self.last_right_image=None
+	    else:
+		    self.last_left_image = leftimage
+            rospy.loginfo("subscribed to left image") 
           
-     def imleft(self, rightimage):
+     def imright(self, rightimage):
+	    if self.last_left_image:
+		    disp = self.stereo.compute(rightimage, self.last_left_image)
+		    self.disp_pub.publish(disp)
+		    self.last_left_image=None
+	    else:
+		    self.last_right_image = rightimage
+            rospy.loginfo("subscribed to right image")
 
-         rightimage = self.bridge.imgmsg_to_cv2(rightimage)
-         return rightimage
-
-     def processImage(self, image_msg):
-        # convert rosmsg to cv2 type
-        image_cv = self.bridge.imgmsg_to_cv2(image_msg)            
-      
-        self.disp_pub.publish(altitude_mtrs) 
-
-
-def main(args):
-   ic = disparity
-   rospy.init_node('disparity', anonymous=True)
-   try:
-     rospy.spin()
-   except KeyboardInterrupt:
-     print "Shutting down ROS altitude module"
-   cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-   main(sys.argv)           
+   
+   rospy.init_node('disparity', anonymous=True)
+   ic = disparity
+   rospy.spin()          

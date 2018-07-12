@@ -16,7 +16,7 @@ class altimeter:
         self.bridge = CvBridge()
          
         self.pub_altitude = rospy.Publisher("altitude",\
-               numpy_msg (Float32), queue_size=1)
+               numpy_msg(Float32), queue_size=1)
         
         self.sub_image = rospy.Subscriber("/depth/depth_registered",\
                 Image, self.processImage, queue_size=1)

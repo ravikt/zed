@@ -1,0 +1,75 @@
+cameras:
+- camera:
+    distortion:
+      parameters:
+        cols: 1
+        rows: 4
+        data: [-0.175805002450943, 0.028154000639915466, 0.0, 0.0]
+      type: radial-tangential
+    image_height: 720
+    image_width: 1280
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [699.191, 699.191, 651.31, 375.179]
+      label: /left/image_raw_color
+    line-delay-nanoseconds: 0
+    type: pinhole
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [699.1909790039062, 0.0, 651.3099975585938, 0.0,
+          0.0, 699.1909790039062, 375.1789855957031, 0.0 ,
+          0.0, 0.0, 1.0, 0.0,
+          0.        ,  0.        ,  0.        ,  1.        ]
+  serial_no: 0
+  calib_date: 0
+  description: 'left cam'
+- camera:
+    distortion:
+      parameters:
+        cols: 1
+        rows: 4
+        data: [-0.17526499927043915, 0.02711939997971058, 0.0, 0.0]
+      type: radial-tangential
+    image_height: 720
+    image_width: 1280
+    intrinsics:
+      cols: 1
+      rows: 4
+      data: [700.793, 700.793, 638.245, 337.72]
+    label: /right/image_raw_color
+    line-delay-nanoseconds: 0
+    type: pinhole
+  T_B_C:
+    cols: 4
+    rows: 4
+    data: [700.7930297851562, 0.0, 638.2449951171875, -44.049034118652344,
+           0.0, 700.7930297851562, 337.7200012207031, 0.0,
+           0.0, 0.0, 1.0, 0.0,
+           0.        ,  0.        ,  0.        ,  1.       ]
+  serial_no: 0
+  calib_date: 0
+  description: 'right cam'
+label: fla1_forward_stereo
+
+imu_params:
+  delay_imu_cam: 0.0
+  max_imu_delta_t: 0.01
+  acc_max: 176.0
+  omega_max: 7.8
+  sigma_omega_c: 0.005
+  sigma_acc_c: 0.01
+  sigma_omega_bias_c: 4.0e-6
+  sigma_acc_bias_c: 0.0002
+  sigma_integration: 0.0
+  g: 9.81007
+  imu_rate: 200.0
+
+imu_initialization:
+  velocity: [0, 0, 0]
+  omega_bias: [0, 0, 0]
+  acc_bias: [0, 0, 0]
+  velocity_sigma: 0.5
+  omega_bias_sigma: 0.005
+  acc_bias_sigma: 0.05

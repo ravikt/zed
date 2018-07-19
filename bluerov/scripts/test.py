@@ -9,7 +9,7 @@ import message_filters
 import roslib
 import rospy
 
-from sensor_msgs.msg import Image, 
+from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 
@@ -25,13 +25,13 @@ def disp():
     imleft_sub = message_filters.Subscriber("/left/image_rect_color", Image, queue_size=1)
     imright_sub = message_filters.Subscriber("/right/image_rect_color", Image, queue_size=1)
             
-    ts = message_filters.TimeSynchronizer([self.imleft_sub, self.imright_sub], 1)
-    ts.registerCallback(self.processImage)
+    ts = message_filters.TimeSynchronizer([imleft_sub, imright_sub], 1)
+    ts.registerCallback(processImage)
     
     rospy.loginfo("disparity initialized")
     rospy.spin()
 
-def processImage(self, imleft, imright):
+def processImage(imleft, imright):
         
     left  = self.bridgeleft.imgmsg_to_cv2(imleft)
     right = self.bridgeright.imgmsg_to_cv2(imright)
@@ -45,4 +45,4 @@ def processImage(self, imleft, imright):
 
 if __name__ == '__main__':
    
-   disp()
+    disp()

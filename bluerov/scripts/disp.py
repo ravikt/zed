@@ -13,7 +13,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 
-class disparity:
+class disp:
     
      def __init__(self):
 
@@ -48,8 +48,8 @@ class disparity:
          self.disp_pub.publish(image_ros_msg) 
 
 def main(args):
-    ic = disparity()
-    rospy.init_node('disparity', anonymous=True)
+    ic = disp()
+    rospy.init_node('disp', anonymous=True)
     try:
         rospy.spin()
     except KeyboardInterrupt:

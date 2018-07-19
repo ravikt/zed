@@ -5,7 +5,7 @@ import rospy
 import roslib
 import numpy as np
 from sensor_msgs.msg import Image
-from std_msgs.msg import Float32  
+from std_msgs.msg import Float32, String  
 from rospy.numpy_msg import numpy_msg
 
 from cv_bridge import CvBridge 
@@ -20,8 +20,8 @@ class altimeter:
         
         self.sub_image = rospy.Subscriber("/depth/depth_registered",\
                 Image, self.processImage, queue_size=1)
-        if VERBOSE: 
-           print "subscribed to /depth/depth_registered"
+        #if VERBOSE: 
+           #print "subscribed to /depth/depth_registered"
         
         rospy.loginfo("altimeter initialized")
 

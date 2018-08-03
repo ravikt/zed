@@ -12,6 +12,8 @@ from cv_bridge import CvBridge
 
 class altimeter:
     def __init__(self):
+
+        self.previous = []
         
         self.bridge = CvBridge()
          
@@ -35,7 +37,7 @@ class altimeter:
               
         
         #print image_cv.dtype
-        altitude = np.nanmin(image_cv)
+        altitude_mtrs = np.nanmin(image_cv)
         #altitude_mtrs = np.nanmax(image_cv)
         #cv2.imshow('depth', image_cv)
         #cv2.waitKey(0)
@@ -49,13 +51,19 @@ class altimeter:
         # convert cv2 message back to rosmsg
         #altitude_mtrs = self.bridge.cv2_to_imgmsg(image_cv, "bgr8")
 
+        # Filter
+        self.previous.append(altitude_mtrs)
+        if len(self.previous) > 49:
+           self.previous = self.previous[-49:]
+           
+        alt = np.nanmedian(self.previous)
         # publish rosmsg 
         msg = Range()
         msg.header.stamp = rospy.Time.now()
         msg.header.frame_id = "/altitude"
         msg.min_range = 0.2
         msg.max_range = 1.9
-        msg.range = altitude
+        msg.range = alt
         #msg = np.array(image_cv, dtype=np.float32)
         #mini = np.min(msg)
         #msg = np.array(altitude_mtrs, dtype=np.float32)
